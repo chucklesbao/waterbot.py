@@ -10,6 +10,18 @@ from keep_alive import keep_alive
 db.clear()
 client = discord.Client()
 
+#not used
+def timeCompare(startHour, startMinute, stopHour, stopMinute):
+  if startHour > stopHour:
+    return False
+  elif startHour < stopHour:
+    return True
+  else:
+    if int(startMinute) <= int(stopMinute):
+      return True
+    else:
+      return False
+
 @client.event
 async def hydrateMessage():
   PST = timezone("US/Pacific")
@@ -103,6 +115,7 @@ async def on_message(message):
       if db["startMinute"] <= db["stopMinute"]:
         sendTimes = np.append(sendTimes, "{h}:{m}".format(h = hourCursor, m = db["startMinute"]))
 
+      sendTimes = sendTimes[0::db["interval"]]
       print(sendTimes)
       db["sendTimes"] = sendTimes.tolist()
 
